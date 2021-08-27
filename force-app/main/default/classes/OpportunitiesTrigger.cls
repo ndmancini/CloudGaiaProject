@@ -41,18 +41,21 @@ public with sharing class OpportunitiesTrigger {
         for (Id oppId : oppsItemsByOppId.keySet()) {
             Project__c newProject = new Project__c();
             Opportunity opp = newOppsById.get(oppId);
-        
-            
+
+            newProject.Name = opp.Name;
             newProject.Opportunity__c = opp.Id;  
-            
 			newProject.Account__c = opp.AccountId;
 			newProject.Start_Date__c = opp.Start_Date__c;
             newProject.Start_Date__c = opp.Start_Date__c;
             newProject.End_Date__c = opp.End_Date__c;
             newProject.Project_Manager__c = opp.Project_Manager__c;
+            newProject.Status__c = 'Pre Kick-Off';
 
             //creamos nuevos projectItems a partir de los oppItems
+            Integer totalHours = 0;
             for (OpportunityLineItem__c item : oppsItemsByOppId.get(oppId)) {
+
+                totalHours = totalHours + (Integer)item.Quantity__c;
                 ProjectLineItem__c newProjectItem = new ProjectLineItem__c();
                 newProjectItem.Project__r = newProject;
                 newProjectItem.Role__c = item.Roles__c;
@@ -60,6 +63,7 @@ public with sharing class OpportunitiesTrigger {
 
                 newProjectItemsList.add(newProjectItem);
             }
+            newProject.Hours__c = totalHours;
             newProjectsList.add(newProject);
         }
         insert newProjectsList;
