@@ -49,6 +49,7 @@ public with sharing class OpportunitiesTrigger {
             //creamos nuevos projectItems a partir de los oppItems
             for (OpportunityLineItem item : oppsItemsByOppId.get(oppId)) {
                 ProjectLineItem__c newProjectItem = new ProjectLineItem__c();
+
                 newProjectItem.Project__r = newProject;
                 newProjectItem.Role__c = item.Role__c;
                 newProjectItem.Quantity__c = item.Quantity;
