@@ -14,21 +14,22 @@ public with sharing class OpportunitiesTrigger {
         }
         
         //Buscamos los items de dichas opportunities que se han cerrado
-        List<OpportunityLineItem> oppsItemsList = [SELECT Quantity, Role__c,
-                                                   Opportunity.Start_Date__c, Opportunity.End_Date__c,
-                                                   Opportunity.Account.Id, Opportunity.Project_Manager__c
-                                                   FROM OpportunityLineItem WHERE OpportunityId IN :closedOpps];
+        List<OpportunityLineItem__c> oppsItemsList = [SELECT Quantity__c, Roles__c,
+                                                   Opportunity__c,
+                                                   Opportunity__r.Start_Date__c, Opportunity__r.End_Date__c,
+                                                   Opportunity__r.Account.Id, Opportunity__r.Project_Manager__c
+                                                   FROM OpportunityLineItem__c WHERE Opportunity__c IN :closedOpps];
         
         //creamos un map donde key=opportunityId, value=List<OpportunityLineItem>>
-        Map<Id, List<OpportunityLineItem>> oppsItemsByOppId = new Map<Id, List<OpportunityLineItem>>();  
+        Map<Id, List<OpportunityLineItem__c>> oppsItemsByOppId = new Map<Id, List<OpportunityLineItem__c>>();  
 
         //completa el Map
-        for (OpportunityLineItem item : oppsItemsList) {
-            if (!oppsItemsByOppId.containsKey(item.OpportunityId)) {
-                oppsItemsByOppId.put(item.OpportunityId, new List<OpportunityLineItem>{item});
+        for (OpportunityLineItem__c item : oppsItemsList) {
+            if (!oppsItemsByOppId.containsKey(item.Opportunity__c)) {
+                oppsItemsByOppId.put(item.Opportunity__c, new List<OpportunityLineItem__c>{item});
             }
             else {
-                oppsItemsByOppId.get(item.OpportunityId).add(item);
+                oppsItemsByOppId.get(item.Opportunity__c).add(item);
             }
         }
         
@@ -47,12 +48,11 @@ public with sharing class OpportunitiesTrigger {
             newProject.Project_Manager__c = opp.Project_Manager__c;
 
             //creamos nuevos projectItems a partir de los oppItems
-            for (OpportunityLineItem item : oppsItemsByOppId.get(oppId)) {
+            for (OpportunityLineItem__c item : oppsItemsByOppId.get(oppId)) {
                 ProjectLineItem__c newProjectItem = new ProjectLineItem__c();
-
                 newProjectItem.Project__r = newProject;
-                newProjectItem.Role__c = item.Role__c;
-                newProjectItem.Quantity__c = item.Quantity;
+                newProjectItem.Role__c = item.Roles__c;
+                newProjectItem.Quantity__c = item.Quantity__c;
 
                 newProjectItemsList.add(newProjectItem);
             }
