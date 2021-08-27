@@ -32,17 +32,21 @@ public with sharing class OpportunitiesTrigger {
                 oppsItemsByOppId.get(item.Opportunity__c).add(item);
             }
         }
+
         
         //ahora recorremos el Map y creamos un nuevo Project__c
         List<Project__c> newProjectsList = new List<Project__c>();
         List<ProjectLineItem__c> newProjectItemsList = new List<ProjectLineItem__c>();
-                
+               
         for (Id oppId : oppsItemsByOppId.keySet()) {
             Project__c newProject = new Project__c();
             Opportunity opp = newOppsById.get(oppId);
         
-            newProject.Opportunity__r.Id = oppId;  
-            newProject.Account__r.Id = opp.AccountId;
+            
+            newProject.Opportunity__c = opp.Id;  
+            
+			newProject.Account__c = opp.AccountId;
+			newProject.Start_Date__c = opp.Start_Date__c;
             newProject.Start_Date__c = opp.Start_Date__c;
             newProject.End_Date__c = opp.End_Date__c;
             newProject.Project_Manager__c = opp.Project_Manager__c;
