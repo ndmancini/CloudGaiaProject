@@ -54,9 +54,12 @@ public class OpportunitiesTest {
         update oppList;
         
         //chequear creación de nuevos Project__c con información proveniente de las opp
-        List<Project__c> newProjectsList =  [SELECT Id, Opportunity__c, Status__c, End_Date__c, Hours__c FROM Project__c WHERE Name = 'This is a test'];
+        List<Project__c> newProjectsList =  [SELECT Id, Opportunity__c, Status__c, End_Date__c, Hours__c
+                                             FROM Project__c WHERE Name = 'This is a test'];
+        
         Project__c newProject = newProjectsList[0];
         
+        system.assertEquals(bulkQuantity, newProjectsList.size());
         system.assertEquals(newProject.Opportunity__c, oppList[0].Id);
         system.assertEquals(newProject.Status__c, 'Pre Kick-Off');
         system.assertEquals(newProject.End_Date__C, oppList[0].End_Date__c);
