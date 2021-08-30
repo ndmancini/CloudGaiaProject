@@ -85,7 +85,7 @@
         <fields>NAME</fields>
         <fields>Quantity__c</fields>
         <fields>QuantityHours__c</fields>
-        <fields>Role__c</fields>
+        <fields>Progress__c</fields>
         <relatedList>ProjectLineItem__c.Project__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
