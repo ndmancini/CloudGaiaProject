@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <applicationVisibilities>
+        <application>Gestin_de_Proyectos</application>
+        <visible>true</visible>
+    </applicationVisibilities>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>P5</label>
+    <license>Salesforce</license>
+    <tabSettings>
+        <tab>Project__c</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+</PermissionSet>
