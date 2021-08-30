@@ -31,14 +31,14 @@
                 <label>Product Owner</label>
             </value>
             <value>
-                <fullName>Testing</fullName>
-                <default>false</default>
-                <label>Testing</label>
-            </value>
-            <value>
                 <fullName>Marketing</fullName>
                 <default>false</default>
                 <label>Marketing</label>
+            </value>
+            <value>
+                <fullName>Tester</fullName>
+                <default>false</default>
+                <label>Tester</label>
             </value>
         </valueSetDefinition>
     </valueSet>

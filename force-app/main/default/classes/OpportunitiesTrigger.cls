@@ -52,7 +52,6 @@ public with sharing class OpportunitiesTrigger {
 
                 totalHours = totalHours + (Integer)item.Quantity__c;
                 ProjectLineItem__c newProjectItem = new ProjectLineItem__c();
-                newProjectItem.Name = item.Roles__c;
                 newProjectItem.Project__r = newProject;
                 newProjectItem.Role__c = item.Roles__c;
                 newProjectItem.Quantity__c = item.Quantity__c;

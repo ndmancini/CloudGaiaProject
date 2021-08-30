@@ -4,7 +4,7 @@ public class OpportunitiesTest {
 	@isTest
     public static void OpportunitiesUpdateTest() {
 
-        Integer bulkQuantity = 300;
+        Integer bulkQuantity = 30;
         List<Opportunity> oppList = new List<Opportunity>();
         List<OpportunityLineItem__c> oppLineItemList = new List<OpportunityLineItem__c>();
 
@@ -33,7 +33,7 @@ public class OpportunitiesTest {
                     oppLineItem.Quantity__c = 15;
                 } 
                 else if (Math.mod(j, 3) == 2) {
-                	oppLineItem.Roles__c = 'Testing';
+                	oppLineItem.Roles__c = 'Tester';
                     oppLineItem.Quantity__c = 6;
                 }
 				oppLineItemList.add(oppLineItem);
@@ -70,7 +70,7 @@ public class OpportunitiesTest {
             Opportunity opp = oppsById.get(newProject.Opportunity__c);
             system.assertEquals(newProject.Opportunity__c, opp.Id);
             system.assertEquals(newProject.Start_Date__c, opp.Start_Date__c);
-            system.assertEquals(newProject.End_Date__C, opp.End_Date__c);
+            system.assertEquals(newProject.End_Date__c, opp.End_Date__c);
             system.assertEquals(newProject.Status__c, 'Pre Kick-Off');
             system.assertEquals(newProject.Hours__c, 31);
         }

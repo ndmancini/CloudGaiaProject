@@ -26,9 +26,9 @@
                 <label>Marketing</label>
             </value>
             <value>
-                <fullName>Testing</fullName>
+                <fullName>Tester</fullName>
                 <default>false</default>
-                <label>Testing</label>
+                <label>Tester</label>
             </value>
         </valueSetDefinition>
     </valueSet>
