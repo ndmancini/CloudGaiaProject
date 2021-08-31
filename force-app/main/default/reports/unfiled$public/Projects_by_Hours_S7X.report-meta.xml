@@ -7,7 +7,7 @@
         <chartSummaries>
             <aggregate>Sum</aggregate>
             <axisBinding>y</axisBinding>
-            <column>FK_$Project__c.Hours__c</column>
+            <column>ProjectLineItem__c.Quantity__c</column>
         </chartSummaries>
         <chartSummaries>
             <aggregate>Sum</aggregate>
@@ -33,7 +33,7 @@
     </chart>
     <columns>
         <aggregateTypes>Sum</aggregateTypes>
-        <field>FK_$Project__c.Hours__c</field>
+        <field>ProjectLineItem__c.Quantity__c</field>
     </columns>
     <columns>
         <aggregateTypes>Sum</aggregateTypes>
