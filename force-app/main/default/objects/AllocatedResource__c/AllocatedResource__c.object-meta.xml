@@ -155,12 +155,13 @@
     <enableStreamingApi>true</enableStreamingApi>
     <externalSharingModel>Private</externalSharingModel>
     <gender>Feminine</gender>
-    <label>AllocatedResource</label>
+    <label>Allocated Resource</label>
     <nameField>
+        <displayFormat>Allocated Resource-{0000}</displayFormat>
         <label>AllocatedResource Name</label>
-        <type>Text</type>
+        <type>AutoNumber</type>
     </nameField>
-    <pluralLabel>AllocatedResources</pluralLabel>
+    <pluralLabel>Allocated Resources</pluralLabel>
     <searchLayouts></searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>

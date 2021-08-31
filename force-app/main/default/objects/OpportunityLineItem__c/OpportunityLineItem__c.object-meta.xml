@@ -154,12 +154,13 @@
     <enableStreamingApi>true</enableStreamingApi>
     <externalSharingModel>Private</externalSharingModel>
     <gender>Feminine</gender>
-    <label>OpportunityLineItem</label>
+    <label>Opportunity role</label>
     <nameField>
+        <displayFormat>Opp Role-{0000}</displayFormat>
         <label>OpportunityLineItem Name</label>
-        <type>Text</type>
+        <type>AutoNumber</type>
     </nameField>
-    <pluralLabel>OpportunityLineItems</pluralLabel>
+    <pluralLabel>Opportunity roles</pluralLabel>
     <searchLayouts></searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
