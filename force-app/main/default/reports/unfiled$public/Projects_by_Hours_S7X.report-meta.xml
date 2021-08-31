@@ -39,15 +39,6 @@
         <aggregateTypes>Sum</aggregateTypes>
         <field>ProjectLineItem__c.QuantityHours__c</field>
     </columns>
-    <filter>
-        <criteriaItems>
-            <column>FK_CUSTENT_ID</column>
-            <columnToColumn>false</columnToColumn>
-            <isUnlocked>false</isUnlocked>
-            <operator>equals</operator>
-            <value>a005f000001W0xS</value>
-        </criteriaItems>
-    </filter>
     <format>Summary</format>
     <groupingsDown>
         <dateGranularity>Day</dateGranularity>
@@ -60,7 +51,7 @@
         <value>1</value>
     </params>
     <reportType>CustomEntity$ProjectLineItem__c@ProjectLineItem__c.Project__c</reportType>
-    <scope>user</scope>
+    <scope>organization</scope>
     <showDetails>true</showDetails>
     <showGrandTotal>false</showGrandTotal>
     <showSubTotals>true</showSubTotals>
