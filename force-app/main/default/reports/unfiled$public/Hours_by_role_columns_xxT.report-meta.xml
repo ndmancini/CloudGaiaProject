@@ -14,16 +14,16 @@
             <axisBinding>y</axisBinding>
             <column>ProjectLineItem__c.QuantityHours__c</column>
         </chartSummaries>
-        <chartType>HorizontalBar</chartType>
+        <chartType>VerticalColumn</chartType>
         <enableHoverLabels>false</enableHoverLabels>
         <expandOthers>true</expandOthers>
-        <groupingColumn>FK_NAME</groupingColumn>
+        <groupingColumn>ProjectLineItem__c.Role__c</groupingColumn>
         <legendPosition>Right</legendPosition>
         <location>CHART_BOTTOM</location>
-        <showAxisLabels>true</showAxisLabels>
+        <showAxisLabels>false</showAxisLabels>
         <showPercentage>false</showPercentage>
         <showTotal>false</showTotal>
-        <showValues>true</showValues>
+        <showValues>false</showValues>
         <size>Medium</size>
         <summaryAxisRange>Auto</summaryAxisRange>
         <textColor>#000000</textColor>
@@ -42,10 +42,10 @@
     <format>Summary</format>
     <groupingsDown>
         <dateGranularity>Day</dateGranularity>
-        <field>FK_NAME</field>
+        <field>ProjectLineItem__c.Role__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
-    <name>Coverage by project</name>
+    <name>Coverage by role</name>
     <params>
         <name>co</name>
         <value>1</value>
@@ -54,7 +54,7 @@
     <scope>user</scope>
     <showDetails>true</showDetails>
     <showGrandTotal>false</showGrandTotal>
-    <showSubTotals>true</showSubTotals>
+    <showSubTotals>false</showSubTotals>
     <timeFrameFilter>
         <dateColumn>CUST_CREATED_DATE</dateColumn>
         <interval>INTERVAL_CUSTOM</interval>
