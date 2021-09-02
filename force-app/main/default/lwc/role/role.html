@@ -1,11 +1,11 @@
 <template>
     <p>{roleName}</p>
-    <p>{startDate}</p>
-    <p>{endDate}</p>
-    <!--<lightning-combobox label="Resources" options={freeResources}></lightning-combobox>
-    <template if:true={freeResources.length}>
+    <p>Start date: {startDate}</p>
+    <p>End date: {endDate}</p>
+    <p>Pending hours: {pendingHours}</p>
+    <template if:true={freeResources}>
         <template for:each={freeResources} for:item="resource">
-            <c-role key={role.Id} name={resource}></c-role>
+            <c-resource key={resource.Id} id={resource.Id} name={resource.Name} role-id={roleId}></c-resource>
         </template>
-    </template>-->
+    </template>
 </template>
