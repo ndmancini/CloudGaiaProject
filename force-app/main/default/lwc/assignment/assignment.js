@@ -9,27 +9,23 @@ export default class Assignment extends LightningElement {
 
     @api recordId;
     roles;
+    startDate;
+    endDate;
     freeResources;
 
     @wire(getRecord, { recordId: '$recordId', fields: [START_DATE_FIELD, END_DATE_FIELD] })
-    project;
-
-    get startDate() {
-        return getFieldValue(this.project.data, START_DATE_FIELD)
-    }
-
-    get endDate() {
-        return getFieldValue(this.project.data, END_DATE_FIELD)
+    loadDates(result) {
+        this.startDate = getFieldValue(result.data, START_DATE_FIELD);
+        this.endDate = getFieldValue(result.data, END_DATE_FIELD);
     }
 
     @wire(getPendingRoles, { projectId: '$recordId' })
     pendindRoles(result) {
         this.roles = result;
-        //console.log(this.roles.data);
     }
 
     @wire(getFreeResources, { startDate: '$startDate', endDate: '$endDate' })
-    freeResourcesMethod(result) {
+    resources(result) {
         this.freeResources = result;
     }
 
