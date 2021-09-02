@@ -1,5 +1,5 @@
 <template>
-    <p>PENDING HOURS BY ROLE</p>
+    <lightning-card>Pending hours by role</lightning-card>
     <!--iterar el array roles[] y mostrar un LWC Role por cada uno de ellos-->
     <template if:true={roles.data}>
         <template for:each={roles.data} for:item="role">
@@ -14,7 +14,7 @@
                     onremoveresource={handleRemove}>
             </c-role>
         </template>
-        <lightning-button label="Assign"></lightning-button>
+        <lightning-button label="Assign" onclick={assign}></lightning-button>
     </template>
     
 </template>

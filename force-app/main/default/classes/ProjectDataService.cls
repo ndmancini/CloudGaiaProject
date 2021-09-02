@@ -1,5 +1,5 @@
 public with sharing class ProjectDataService {
-
+    
     //método para traernos los roles con horas pendientes en un project__c
     @AuraEnabled(Cacheable=true)
     public static List<ProjectLineItem__c> getPendingRoles(Id projectId) {
@@ -7,7 +7,7 @@ public with sharing class ProjectDataService {
                 FROM ProjectLineItem__c
                 WHERE Project__c = :projectId AND Covered__c = false];        
     }
-
+    
     //método para traernos los recursos libres fuera de las fechas pasadas como parámetro
     @AuraEnabled(Cacheable=true)
     public static List<User> getFreeResources(Date startDate, Date endDate) {
@@ -19,16 +19,29 @@ public with sharing class ProjectDataService {
                                         (End_Date__c >= :startDate AND End_Date__c <= :endDate) OR     //termina durante el proyecto
                                         (Start_Date__c <= :startDate AND End_Date__c >= :endDate)))];  //empieza y termina fuera del proyecto
     }
-
+    
     //método para traernos los recursos libres fuera de las fechas pasadas como parámetro
     @AuraEnabled(Cacheable=true)
     public static List<User> getFreeResourcesByRole(Date startDate, Date endDate, String role) {
         return [SELECT Id, Name, UserRole.Name
                 FROM User
                 WHERE UserRole.Name = :role AND Id NOT IN (SELECT Resource__c
-                FROM AllocatedResource__c
-                WHERE ((Start_Date__c >= :startDate AND Start_Date__c <= :endDate) OR //empieza durante el proyecto
-                      (End_Date__c >= :startDate AND End_Date__c <= :endDate) OR     //termina durante el proyecto
-                      (Start_Date__c <= :startDate AND End_Date__c >= :endDate)))];  //empieza y termina fuera del proyecto
+                                                           FROM AllocatedResource__c
+                                                           WHERE ((Start_Date__c >= :startDate AND Start_Date__c <= :endDate) OR //empieza durante el proyecto
+                                                                  (End_Date__c >= :startDate AND End_Date__c <= :endDate) OR     //termina durante el proyecto
+                                                                  (Start_Date__c <= :startDate AND End_Date__c >= :endDate)))];  //empieza y termina fuera del proyecto
     }
+    
+    //método para insertar registros en el objeto AllocatedResource (asignar recursos)
+    @AuraEnabled(Cacheable=true)
+    public static void assignResource(AllocatedResource__c newAllocatedResource) {
+        try {
+            System.debug(newAllocatedResource);
+            insert newAllocatedResource;
+        }
+        catch(DmlException e) {
+            System.debug('The following exception has occurred: ' + e.getMessage());
+        }
+    }
+    
 }
