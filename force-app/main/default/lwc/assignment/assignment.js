@@ -7,6 +7,7 @@ import END_DATE_FIELD from '@salesforce/schema/Project__c.End_Date__c';
 export default class Assignment extends LightningElement {
 
     @api recordId;
+    listToAssign = [];
     roles;
     startDate;
     endDate;
@@ -20,5 +21,20 @@ export default class Assignment extends LightningElement {
     @wire(getPendingRoles, { projectId: '$recordId' })
     pendindRoles(result) {
         this.roles = result;
+    }
+
+    handleAdd(e) {
+        this.listToAssign.push({ userId: e.detail.id, projectItemId: e.detail.roleId })
+        //console.log(this.listToAssign);
+    }
+
+    handleRemove(e) {
+        for (let i = 0; i < this.listToAssign.length; i++) {
+            if (this.listToAssign[i].userId == e.detail.id) {
+                this.listToAssign.splice(i, 1);
+                break;
+            }
+        }
+        //console.log(this.listToAssign);
     }
 }

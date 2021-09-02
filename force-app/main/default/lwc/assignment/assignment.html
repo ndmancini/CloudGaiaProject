@@ -1,9 +1,20 @@
 <template>
-    <p>PENDING ROLES</p>
-    <!--iterar el array roles[] y mostrar un LWC RoleComponent por cada uno de ellos-->
+    <p>PENDING HOURS BY ROLE</p>
+    <!--iterar el array roles[] y mostrar un LWC Role por cada uno de ellos-->
     <template if:true={roles.data}>
         <template for:each={roles.data} for:item="role">
-            <c-role key={role.Id} role-name={role.Role__c} start-date={startDate} end-date={endDate}></c-role>
+            <c-role key={role.Id}
+                    role-id={role.Id}
+                    role-name={role.Role__c}
+                    start-date={startDate}
+                    end-date={endDate}
+                    total-hours={role.Quantity__c}
+                    covered-hours={role.QuantityHours__c}
+                    onaddresource={handleAdd}
+                    onremoveresource={handleRemove}>
+            </c-role>
         </template>
+        <lightning-button label="Assign"></lightning-button>
     </template>
+    
 </template>
