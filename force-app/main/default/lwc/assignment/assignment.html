@@ -2,11 +2,8 @@
     <p>PENDING ROLES</p>
     <!--iterar el array roles[] y mostrar un LWC RoleComponent-->
     <template if:true={roles.data}>
-        <p>maldita sea</p>
-        <!--<p>{startDate}</p>
-        <p>{endDate}</p>-->
         <template for:each={roles.data} for:item="role">
-            <c-role key={role.Id} role-name={role.Role__c} start-date={startDate}></c-role>
+            <c-role key={role.Id} role-name={role.Role__c} start-date={startDate} end-date={endDate} free-resources={freeResources.data}></c-role>
         </template>
     </template>
 </template>
