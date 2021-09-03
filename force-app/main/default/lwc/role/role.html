@@ -1,11 +1,13 @@
 <template>
-    <p>{roleName}</p>
-    <p>Start date: {startDate}</p>
-    <p>End date: {endDate}</p>
-    <p>Pending hours: {pendingHours}</p>
-    <template if:true={freeResources}>
-        <template for:each={freeResources} for:item="resource">
-            <c-resource key={resource.Id} id={resource.Id} name={resource.Name} role-id={roleId}></c-resource>
+
+    <lightning-tile label={roleName} type="media">
+        <lightning-icon slot="media" icon-name="standard:user_role"></lightning-icon>
+        <p class="slds-truncate">Pending hours: {pendingHours}</p>
+        <template if:true={freeResources}>
+            <template for:each={freeResources} for:item="resource">
+                <c-resource key={resource.Id} id={resource.Id} name={resource.Name} role-id={roleId}></c-resource>
+            </template>
         </template>
-    </template>
+    </lightning-tile>
+    
 </template>
