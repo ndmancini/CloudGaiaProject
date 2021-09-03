@@ -64,5 +64,14 @@ export default class Assignment extends LightningElement {
             .then(() => console.log('listo'))
 
         });
+
+        /*const fields = {};
+        fields[RESOURCE.fieldApiName] = '0055f000000unFzAAI';
+        fields[PROJECT_ITEM.fieldApiName] = 'a025f000001bXIAAA2';
+        const recordInput = { Resource__c: '0055f000000unG4AAI', ProjectsItem__c: 'a025f000001bXIAAA2' }
+
+        let arrToAsign = [];
+        arrToAsign.push(recordInput);
+        assignResource(arrToAsign);*/
     }
 }

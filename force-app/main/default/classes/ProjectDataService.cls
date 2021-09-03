@@ -34,14 +34,26 @@ public with sharing class ProjectDataService {
     
     //método para insertar registros en el objeto AllocatedResource (asignar recursos)
     @AuraEnabled(Cacheable=true)
-    public static void assignResource(List<AllocatedResource__c> newAllocatedResources) {
-        try {
-            System.debug(newAllocatedResources);
-            insert newAllocatedResources;
-        }
-        catch(DmlException e) {
-            System.debug('The following exception has occurred: ' + e.getMessage());
-        }
+    public static void assignResource(List<Object> newJSONAllocatedResources) {
+
+            System.debug(newJSONAllocatedResources);
+            List<Object> objectList = (List<Object>) newJSONAllocatedResources;
+            List<AllocatedResource__c> newAllocatedResourcesList = new List<AllocatedResource__c>();
+
+            for (Object obj : objectList) {
+                Map<String, Object> objectMap = (Map<String, Object>) obj;
+                AllocatedResource__c newResource = new AllocatedResource__c();
+                newResource.Resource__c = (Id)objectMap.get('Resource__c');
+                newResource.ProjectsItem__c = (Id)objectMap.get('ProjectsItem__c');
+                newAllocatedResourcesList.add(newResource);
+            }
+        
+		insert newAllocatedResourcesList;
+
+        //System.debug('hola');
+        //System.debug(newAllocatedResources);
+        //insert newAllocatedResources;
+
     }
     
 }
