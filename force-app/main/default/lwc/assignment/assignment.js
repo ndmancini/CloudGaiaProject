@@ -1,5 +1,5 @@
 import { LightningElement, api, wire } from 'lwc';
-import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
+import { getRecord, getFieldValue, createRecord } from 'lightning/uiRecordApi';
 import getPendingRoles from '@salesforce/apex/ProjectDataService.getPendingRoles';
 import assignResource from '@salesforce/apex/ProjectDataService.assignResource';
 
@@ -8,9 +8,9 @@ import START_DATE_FIELD from '@salesforce/schema/Project__c.Start_Date__c';
 import END_DATE_FIELD from '@salesforce/schema/Project__c.End_Date__c';
 
 //fields del objeto AllocatedResource__c
-import ALLOCATED_RESOURCE_OBJECT from '@salesforce/schema/AllocatedResource__c';
-import RESOURCE_FIELD from '@salesforce/schema/AllocatedResource__c.Resource__c';
-import PROJECT_ITEM_FIELD from '@salesforce/schema/AllocatedResource__c.ProjectsItem__c';
+import ALLOCATED_RESOURCE from '@salesforce/schema/AllocatedResource__c';
+import RESOURCE from '@salesforce/schema/AllocatedResource__c.Resource__c';
+import PROJECT_ITEM from '@salesforce/schema/AllocatedResource__c.ProjectsItem__c';
 import START_DATE from '@salesforce/schema/AllocatedResource__c.Start_Date__c';
 import END_DATE from '@salesforce/schema/AllocatedResource__c.End_Date__c';
 
@@ -34,7 +34,7 @@ export default class Assignment extends LightningElement {
     }
 
     handleAdd(e) {
-        this.listToAssign.push({ userId: e.detail.id, projectItemId: e.detail.roleId })
+        this.listToAssign.push({ userId: e.detail.id.substring(0, e.detail.id.length-4), projectItemId: e.detail.roleId })
         console.log(this.listToAssign);
     }
 
@@ -49,16 +49,20 @@ export default class Assignment extends LightningElement {
     }
 
     assign() {
-        let Resource__c = RESOURCE_FIELD;
-        let ProjectsItem__c = PROJECT_ITEM_FIELD;
-        let rec = { Resource__c, ProjectsItem__c };
 
-        rec.Resource__c = '0055f000000unFVAAY';
-        rec.ProjectsItem__c = 'a025f000001bXIBAA2';
-        
-        console.log(rec);
+        this.listToAssign.forEach(item => {
 
-        assignResource({ newAllocatedResource: rec })
-        .then(() => console.log('al demonio'))
+            const fields = {};
+            fields[RESOURCE.fieldApiName] = item.userId;
+            fields[PROJECT_ITEM.fieldApiName] = item.projectItemId;
+            fields[START_DATE.fieldApiName] = this.startDate;
+            fields[END_DATE.fieldApiName] = this.endDate;
+
+            const recordInput = { apiName: ALLOCATED_RESOURCE.objectApiName, fields}
+
+            createRecord(recordInput)
+            .then(() => console.log('listo'))
+
+        });
     }
 }

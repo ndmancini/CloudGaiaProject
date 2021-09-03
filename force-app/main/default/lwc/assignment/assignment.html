@@ -1,5 +1,5 @@
 <template>
-    <lightning-card>Pending hours by role</lightning-card>
+    <lightning-card title="Pending hours by role" variant="Narrow"></lightning-card>
     <!--iterar el array roles[] y mostrar un LWC Role por cada uno de ellos-->
     <template if:true={roles.data}>
         <template for:each={roles.data} for:item="role">

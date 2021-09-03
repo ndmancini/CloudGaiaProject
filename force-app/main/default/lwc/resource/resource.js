@@ -6,14 +6,6 @@ export default class Resource extends LightningElement {
     @api roleId;
     selected = false;
 
-    selectResource(e) {
-        e.preventDefault();
-
-        //despacha un evento custom a su abuelo 'assignment' con la información del recurso asignado
-        const selectedResource = new CustomEvent('addresource', { detail: { id: this.id, name: this.name }, bubbles: true, composed: true })
-        this.dispatchEvent(selectedResource);
-    }
-
     handleCheck(e) {
         e.preventDefault();
         if (!this.selected) {

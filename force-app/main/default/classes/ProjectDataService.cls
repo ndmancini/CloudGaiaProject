@@ -34,10 +34,10 @@ public with sharing class ProjectDataService {
     
     //método para insertar registros en el objeto AllocatedResource (asignar recursos)
     @AuraEnabled(Cacheable=true)
-    public static void assignResource(AllocatedResource__c newAllocatedResource) {
+    public static void assignResource(List<AllocatedResource__c> newAllocatedResources) {
         try {
-            System.debug(newAllocatedResource);
-            insert newAllocatedResource;
+            System.debug(newAllocatedResources);
+            insert newAllocatedResources;
         }
         catch(DmlException e) {
             System.debug('The following exception has occurred: ' + e.getMessage());
