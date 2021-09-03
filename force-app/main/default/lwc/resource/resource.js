@@ -4,6 +4,8 @@ export default class Resource extends LightningElement {
     @api id;
     @api name;
     @api roleId;
+    @api startDate;
+    @api endDate;
     selected = false;
 
     handleCheck(e) {
