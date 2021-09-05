@@ -8,17 +8,27 @@ public with sharing class ProjectDataService {
                 WHERE Project__c = :projectId AND Covered__c = false];        
     }
     
-    /*//método para traernos los recursos libres fuera de las fechas pasadas como parámetro
+    //método para traernos los recursos libres fuera de las fechas pasadas como parámetro
     @AuraEnabled(Cacheable=true)
-    public static List<User> getFreeResources(Date startDate, Date endDate) {
-        return [SELECT Id, Name, UserRole.Name
+    public static Map<String, List<User>> getFreeResources(Date startDate, Date endDate) {
+        List<User> freeResourcesList = [SELECT Id, Name, UserRole.Name
                 FROM User
                 WHERE Id NOT IN (SELECT Resource__c
                                  FROM AllocatedResource__c
                                  WHERE ((Start_Date__c >= :startDate AND Start_Date__c <= :endDate) OR //empieza durante el proyecto
                                         (End_Date__c >= :startDate AND End_Date__c <= :endDate) OR     //termina durante el proyecto
                                         (Start_Date__c <= :startDate AND End_Date__c >= :endDate)))];  //empieza y termina fuera del proyecto
-    }*/
+    
+    	//mapa donde key=RoleName; value= list de resources libres con ese rol
+        Map<String, List<User>> freeResourcesByRole = new Map<String, List<User>>();
+        for (User resource : freeResourcesList) {
+            if (!freeResourcesByRole.containsKey(resource.UserRole.Name)) {
+                freeResourcesByRole.put(resource.UserRole.Name, new List<User>{resource});
+            }
+            else freeResourcesByRole.get(resource.UserRole.Name).add(resource);
+        }
+        return freeResourcesByRole;
+    }
     
     //método para traernos los recursos libres fuera de las fechas pasadas como parámetro
     @AuraEnabled(Cacheable=true)
