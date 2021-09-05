@@ -28,7 +28,7 @@ export default class Assignment extends LightningElement {
     }
 
     handleAdd(e) {
-        this.listToAssign.push({ Resource__c: e.detail.id.substring(0, e.detail.id.length-4), ProjectsItem__c: e.detail.roleId, Start_Date__c: this.startDate, End_Date__c: this.endDate })
+        this.listToAssign.push({ Resource__c: e.detail.id.substring(0, e.detail.id.length-4), ProjectsItem__c: e.detail.roleId, Start_Date__c: e.detail.startDate, End_Date__c: e.detail.endDate })
         //console.log(this.listToAssign);
     }
 

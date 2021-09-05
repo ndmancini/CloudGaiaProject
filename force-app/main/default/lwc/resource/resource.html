@@ -1,8 +1,8 @@
 <template>
     <div class="slds-grid slds-wrap slds-gutters_large slds-align_absolute-center">
         <lightning-input type="checkbox" label={name} onchange={handleCheck} class="slds-col slds-size_1-of-4"></lightning-input>
-        <lightning-input type="date" name="input2" label="Start date" min={startDate} max={endDate}  value={startDate} class="slds-col slds-size_1-of-4"></lightning-input>
-        <lightning-input type="date" name="input2" label="End date" min={startDate} max={endDate} value={endDate} class="slds-col slds-size_1-of-4"></lightning-input>
+        <lightning-input type="date" name="input2" label="Start date" min={startDate} max={endDate}  value={startDate} onchange={startDateChange} class="slds-col slds-size_1-of-4"></lightning-input>
+        <lightning-input type="date" name="input2" label="End date" min={startDate} max={endDate} value={endDate} onchange={endDateChange} class="slds-col slds-size_1-of-4"></lightning-input>
     </div>
 </template>
 
