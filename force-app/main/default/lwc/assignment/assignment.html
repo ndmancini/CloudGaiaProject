@@ -11,7 +11,8 @@
                     total-hours={role.Quantity__c}
                     covered-hours={role.QuantityHours__c}
                     onaddresource={handleAdd}
-                    onremoveresource={handleRemove}>
+                    onremoveresource={handleRemove}
+                    oneditresource={handleEdit}>
             </c-role>
         </template>
         <lightning-button label="Assign" onclick={assign} class="slds-p-vertical_large"></lightning-button>

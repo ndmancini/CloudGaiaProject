@@ -10,14 +10,32 @@ export default class Resource extends LightningElement {
 
     startDateChange(e) {
         e.preventDefault();
-        this.startDate = e.target.value;
-        console.log(this.startDate);
+        this.startDate = e.target.value;    //si cambia el input de StartDate, cambiar variable local
+
+        //si el recurso ya fue selectado, está despachado en assignment LWC, por lo que habrá que modificar la fecha
+        if (this.selected) {
+            const editResource = new CustomEvent('editresource',
+                {
+                    detail: { id: this.id, startDate: this.startDate, endDate: this.endDate },
+                    bubbles: true, composed: true
+                })
+            this.dispatchEvent(editResource);
+        }
     }
 
     endDateChange(e) {
         e.preventDefault();
-        this.endDate = e.target.value;
-        console.log(this.endDate);
+        this.endDate = e.target.value;  //si cambia el input de EndDate, cambiar variable local
+
+        //si el recurso ya fue selectado, está despachado en assignment LWC, por lo que habrá que modificar la fecha
+        if (this.selected) {
+            const editResource = new CustomEvent('editresource',
+                {
+                    detail: { id: this.id, startDate: this.startDate, endDate: this.endDate },
+                    bubbles: true, composed: true
+                })
+            this.dispatchEvent(editResource);
+        }
     }
 
     //si el checkbox fue seleccionado, despachar 'addresource' al assingment LWC

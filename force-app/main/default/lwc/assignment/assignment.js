@@ -10,8 +10,8 @@ import END_DATE_FIELD from '@salesforce/schema/Project__c.End_Date__c';
 
 export default class Assignment extends LightningElement {
 
-    @api recordId;
-    listToAssign = [];
+    @api recordId;          //recordId del proyecto seleccionado
+    listToAssign = [];      //arreglo de resources selectados para ser asignados
     roles;
     startDate;
     endDate;
@@ -27,26 +27,39 @@ export default class Assignment extends LightningElement {
         this.roles = result;
     }
 
+    //ataja el customEvent 'addresource' desde Resource LWC
     handleAdd(e) {
         this.listToAssign.push({ Resource__c: e.detail.id.substring(0, e.detail.id.length-4), ProjectsItem__c: e.detail.roleId, Start_Date__c: e.detail.startDate, End_Date__c: e.detail.endDate })
-        //console.log(this.listToAssign);
+        console.log(this.listToAssign);
     }
 
+    //ataja el customEvent 'removeresource' desde Resource LWC
     handleRemove(e) {
         for (let i = 0; i < this.listToAssign.length; i++) {
-            if (this.listToAssign[i].userId == e.detail.id) {
+            if (this.listToAssign[i].Resource__c == e.detail.id.substring(0, e.detail.id.length-4)) {
                 this.listToAssign.splice(i, 1);
                 break;
             }
         }
-        //console.log(this.listToAssign);
+        console.log(this.listToAssign);
+    }
+
+    //ataja el customEvent 'editresource' desde Resource LWC
+    handleEdit(e) {
+        this.listToAssign.forEach(item => {
+            if (item.Resource__c == e.detail.id.substring(0, e.detail.id.length-4)) {
+                item.Start_Date__c = e.detail.startDate;
+                item.End_Date__c = e.detail.endDate;
+            }
+        });
+        console.log(this.listToAssign);
     }
 
     assign() {
         assignResource({ newAllocatedResources: this.listToAssign })
         .then(() =>{
-            getFreeResources({ startDate: this.startDate, endDate: this.endDate })
-            .then(result => console.log(result))
+            //getFreeResources({ startDate: this.startDate, endDate: this.endDate })
+            //.then(result => console.log(result))
             window.location.reload()
         })
     }
