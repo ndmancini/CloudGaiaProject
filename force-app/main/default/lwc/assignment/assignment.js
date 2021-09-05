@@ -29,6 +29,7 @@ export default class Assignment extends LightningElement {
         this.loadData();
     }
 
+    //cargamos la data en pendingRoles y freeResources
     loadData() {
         getPendingRoles({ projectId: this.recordId })
         .then(pendingRoles => {
@@ -70,10 +71,7 @@ export default class Assignment extends LightningElement {
     //guarda la lista listToAssign en la DB
     assign() {
         assignResource({ newAllocatedResources: this.listToAssign })
-        .then(() =>{
-            
-            window.location.reload();
-        })
+        .then(() => window.location.reload())
     }
 
     @api async refresh() {
