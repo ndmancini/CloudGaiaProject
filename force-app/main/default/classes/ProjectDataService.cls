@@ -35,11 +35,11 @@ public with sharing class ProjectDataService {
     public static List<User> getFreeResourcesByRole(Date startDate, Date endDate, String role) {
         return [SELECT Id, Name, UserRole.Name
                 FROM User
-                WHERE UserRole.Name = :role AND Id NOT IN (SELECT Resource__c
-                                                           FROM AllocatedResource__c
-                                                           WHERE ((Start_Date__c >= :startDate AND Start_Date__c <= :endDate) OR //empieza durante el proyecto
-                                                                  (End_Date__c >= :startDate AND End_Date__c <= :endDate) OR     //termina durante el proyecto
-                                                                  (Start_Date__c <= :startDate AND End_Date__c >= :endDate)))];  //empieza y termina fuera del proyecto
+                WHERE UserRole.Name = :role];// AND Id NOT IN (SELECT Resource__c
+                                             //              FROM AllocatedResource__c
+                                             //              WHERE ((Start_Date__c >= :startDate AND Start_Date__c <= :endDate) OR //empieza durante el proyecto
+                                             //                     (End_Date__c >= :startDate AND End_Date__c <= :endDate) OR     //termina durante el proyecto
+                                             //                     (Start_Date__c <= :startDate AND End_Date__c >= :endDate)))];  //empieza y termina fuera del proyecto
     }
     
     //método para insertar registros en el objeto AllocatedResource (asignar recursos)
