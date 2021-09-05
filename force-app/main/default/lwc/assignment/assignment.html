@@ -1,21 +1,17 @@
 <template>
     <lightning-card title="Pending hours by role" variant="Narrow"></lightning-card>
-    <!--iterar el array roles[] y mostrar un LWC Role por cada uno de ellos-->
-    <template if:true={roles.data} class="slds-p-vertical_large">
-        <template for:each={roles.data} for:item="role">
-            <c-role key={role.Id}
-                    role-id={role.Id}
-                    role-name={role.Role__c}
-                    start-date={startDate}
-                    end-date={endDate}
-                    total-hours={role.Quantity__c}
-                    covered-hours={role.QuantityHours__c}
-                    onaddresource={handleAdd}
-                    onremoveresource={handleRemove}
+    <!--iterar el array pendingRoles[] y mostrar un LWC Role por cada uno de ellos-->
+    <template if:true={pendingRoles} class="slds-p-vertical_large">
+        <template if:true={freeResources}>
+            <template for:each={pendingRoles} for:item="role">
+                <c-role key={role.Id} role-id={role.Id} role-name={role.Role__c} start-date={startDate}
+                    end-date={endDate} total-hours={role.Quantity__c} covered-hours={role.QuantityHours__c}
+                    resources={freeResources} onaddresource={handleAdd} onremoveresource={handleRemove}
                     oneditresource={handleEdit}>
-            </c-role>
+                </c-role>
+            </template>
         </template>
-        <lightning-button label="Assign" onclick={assign} class="slds-p-vertical_large"></lightning-button>
+        <lightning-button label="Assign" onclick={assign} class="slds-p-vertical_large" variant="brand">
+        </lightning-button>
     </template>
-    
 </template>

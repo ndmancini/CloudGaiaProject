@@ -1,0 +1,13 @@
+.resource {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    margin: 10px auto;
+}
+
+.resourceCheckBox {
+    border-radius: 5px;
+    background-color: rgb(255, 215, 140);
+    padding: 15px;
+}

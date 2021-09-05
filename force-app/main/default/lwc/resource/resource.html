@@ -1,16 +1,10 @@
 <template>
-    <div class="slds-grid slds-wrap slds-gutters_large slds-align_absolute-center">
-        <lightning-input type="checkbox" label={name} onchange={handleCheck} class="slds-col slds-size_1-of-4"></lightning-input>
-        <lightning-input type="date" name="input2" label="Start date" min={startDate} max={endDate}  value={startDate} onchange={startDateChange} class="slds-col slds-size_1-of-4"></lightning-input>
-        <lightning-input type="date" name="input2" label="End date" min={startDate} max={endDate} value={endDate} onchange={endDateChange} class="slds-col slds-size_1-of-4"></lightning-input>
+    <div class="resource">
+        <lightning-input type="checkbox" label={name} onchange={handleCheck}
+            class="slds-col slds-size_1-of-4 resourceCheckBox"></lightning-input>
+        <lightning-input type="date" label="Start date" min={startDate} max={endDate} value={startDate}
+            onchange={startDateChange} class="slds-col slds-size_1-of-4"></lightning-input>
+        <lightning-input type="date" label="End date" min={startDate} max={endDate} value={endDate}
+            onchange={endDateChange} class="slds-col slds-size_1-of-4"></lightning-input>
     </div>
 </template>
-
-<!--<template>
-    <lightning-record-form object-api-name={objectApiName} record-id={recordId} fields={fields}>
-        <lightning-input type="checkbox" label={name} onchange={handleCheck}>
-        </lightning-input>
-        <lightning-input type="date" name="input2" label="Start date" value="2020-09-07"></lightning-input>
-        <lightning-input type="date" name="input2" label="End date" value="2020-09-07"></lightning-input>
-    </lightning-record-form>
-</template>-->

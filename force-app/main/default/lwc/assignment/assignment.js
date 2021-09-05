@@ -1,5 +1,6 @@
 import { LightningElement, api, wire } from 'lwc';
 import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
+import { refreshApex } from '@salesforce/apex';
 import getFreeResources from '@salesforce/apex/ProjectDataService.getFreeResources';
 import getPendingRoles from '@salesforce/apex/ProjectDataService.getPendingRoles';
 import assignResource from '@salesforce/apex/ProjectDataService.assignResource';
@@ -12,19 +13,31 @@ export default class Assignment extends LightningElement {
 
     @api recordId;          //recordId del proyecto seleccionado
     listToAssign = [];      //arreglo de resources selectados para ser asignados
-    roles;
-    startDate;
-    endDate;
+    freeResources;          //recursos libres que vienen de la DB
+    pendingRoles;           //roles pendientes que vienen de la DB
+    startDate;              //comienzo del proyecto
+    endDate;                //fin del proyecto
 
+    //traemos fechas del proyecto
     @wire(getRecord, { recordId: '$recordId', fields: [START_DATE_FIELD, END_DATE_FIELD] })
     loadDates(result) {
         this.startDate = getFieldValue(result.data, START_DATE_FIELD);
         this.endDate = getFieldValue(result.data, END_DATE_FIELD);
     }
 
-    @wire(getPendingRoles, { projectId: '$recordId' })
-    pendindRoles(result) {
-        this.roles = result;
+    connectedCallback() {
+        this.loadData();
+    }
+
+    //cargamos la data en pendingRoles y freeResources
+    loadData() {
+        getPendingRoles({ projectId: this.recordId })
+        .then(pendingRoles => {
+            this.pendingRoles = pendingRoles;
+            let roles = pendingRoles.map(item => item.Role__c);
+            getFreeResources({ roles })
+            .then(freeResources => this.freeResources = freeResources)
+        })
     }
 
     //ataja el customEvent 'addresource' desde Resource LWC
@@ -55,12 +68,13 @@ export default class Assignment extends LightningElement {
         console.log(this.listToAssign);
     }
 
+    //guarda la lista listToAssign en la DB
     assign() {
         assignResource({ newAllocatedResources: this.listToAssign })
-        .then(() =>{
-            //getFreeResources({ startDate: this.startDate, endDate: this.endDate })
-            //.then(result => console.log(result))
-            window.location.reload()
-        })
+        .then(() => window.location.reload())
+    }
+
+    @api async refresh() {
+        await refreshApex(this.loadData());
     }
 }
