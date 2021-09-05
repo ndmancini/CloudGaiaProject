@@ -1,5 +1,6 @@
 import { LightningElement, api, wire } from 'lwc';
 import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
+import getFreeResources from '@salesforce/apex/ProjectDataService.getFreeResources';
 import getPendingRoles from '@salesforce/apex/ProjectDataService.getPendingRoles';
 import assignResource from '@salesforce/apex/ProjectDataService.assignResource';
 
@@ -44,6 +45,8 @@ export default class Assignment extends LightningElement {
     assign() {
         assignResource({ newAllocatedResources: this.listToAssign })
         .then(() =>{
+            getFreeResources({ startDate: this.startDate, endDate: this.endDate })
+            .then(result => console.log(result))
             window.location.reload()
         })
     }
