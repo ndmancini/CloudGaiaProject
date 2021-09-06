@@ -7,6 +7,13 @@ public with sharing class ProjectDataService {
                 FROM ProjectLineItem__c
                 WHERE Project__c = :projectId AND Covered__c = false];        
     }
+
+    //método que nos devuelve los recursos asignados a un projecto
+    @AuraEnabled(Cacheable=true)
+    public static List<User> getResourcesInProject(Id projectId){
+        return [SELECT Id, Name FROM User
+                WHERE Id IN (SELECT Resource__c FROM AllocatedResource__c WHERE ProjectsItem__r.Project__c = :projectId)];
+    }
     
     //método para traernos los recursos libres fuera de las fechas pasadas como parámetro
     @AuraEnabled(Cacheable=true)
@@ -47,5 +54,13 @@ public with sharing class ProjectDataService {
     public static void assignResource(List<AllocatedResource__c> newAllocatedResources) {
         insert newAllocatedResources;
     }
-    
+
+    //método para insertar el squadLead del projecto
+    @AuraEnabled
+    public static void assingSquadLead(Id userId, Id projectId) {
+        Project__c project = [SELECT Id, Squad_Lead__c FROM Project__c WHERE Id = :projectId];
+        project.Squad_Lead__c = userId;
+        update project;
+    }
+
 }
