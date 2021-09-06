@@ -88,17 +88,18 @@ export default class Assignment extends LightningElement {
 
     //guarda la lista listToAssign en la DB
     assign() {
-        assignResource({ newAllocatedResources: this.listToAssign })
-        .then(() => {
 
-            window.location.reload();
-
+        if (!this.listToAssign.length) {
             this.dispatchEvent(new ShowToastEvent({
-                title: 'Resource assigned',
-                message: 'Resources assigned to the project in its role.',
-                variant: 'success'
+                title: 'No resource selected',
+                message: "Please, choose a resource to assign.",
+                variant: 'warning'
             }))
-            })
+            return;
+        }
+
+        assignResource({ newAllocatedResources: this.listToAssign })
+        .then(() => window.location.reload())
         .catch(error => {
             this.dispatchEvent(new ShowToastEvent({
                 title: 'Error in assignment',
@@ -110,7 +111,7 @@ export default class Assignment extends LightningElement {
 
     updateSquadLead(e) {
         assingSquadLead({ userId: e.target.value, projectId: this.recordId })
-            .then(() => console.log('listo'))
+            .then(() => window.location.reload())
     }
 
     @api async refresh() {
