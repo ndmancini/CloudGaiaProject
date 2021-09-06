@@ -52,7 +52,8 @@ public with sharing class ProjectDataService {
     //método para insertar registros en el objeto AllocatedResource (asignar recursos)
     @AuraEnabled
     public static void assignResource(List<AllocatedResource__c> newAllocatedResources) {
-        insert newAllocatedResources;
+        //insert newAllocatedResources;
+        database.insert(newAllocatedResources, false);
     }
 
     //método para insertar el squadLead del projecto

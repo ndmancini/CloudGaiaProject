@@ -1,6 +1,7 @@
 import { LightningElement, api, wire } from 'lwc';
 import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
 import { refreshApex } from '@salesforce/apex';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getFreeResources from '@salesforce/apex/ProjectDataService.getFreeResources';
 import getPendingRoles from '@salesforce/apex/ProjectDataService.getPendingRoles';
 import getResourcesInProject from '@salesforce/apex/ProjectDataService.getResourcesInProject';
@@ -88,7 +89,23 @@ export default class Assignment extends LightningElement {
     //guarda la lista listToAssign en la DB
     assign() {
         assignResource({ newAllocatedResources: this.listToAssign })
-            .then(() => window.location.reload())
+        .then(() => {
+
+            window.location.reload();
+
+            this.dispatchEvent(new ShowToastEvent({
+                title: 'Resource assigned',
+                message: 'Resources assigned to the project in its role.',
+                variant: 'success'
+            }))
+            })
+        .catch(error => {
+            this.dispatchEvent(new ShowToastEvent({
+                title: 'Error in assignment',
+                message: "Couldn't complete the assignment. Please, verify the dates.",
+                variant: 'error'
+            }))
+        })
     }
 
     updateSquadLead(e) {

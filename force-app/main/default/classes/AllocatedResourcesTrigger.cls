@@ -9,7 +9,7 @@ public with sharing class AllocatedResourcesTrigger {
         }
 
         //traemos las allocations viejas de dichos Users
-        List<AllocatedResource__c> oldAllocations = [SELECT Id, Resource__c, Start_Date__c, End_Date__c 
+        List<AllocatedResource__c> oldAllocations = [SELECT Id, Resource__c, Resource__r.Name, Start_Date__c, End_Date__c 
                                                      FROM AllocatedResource__c WHERE Resource__c IN :usersId];
 
         //map donde Key=userId, value=Lista de sus allocations viejas
@@ -33,17 +33,19 @@ public with sharing class AllocatedResourcesTrigger {
                 for (AllocatedResource__c oldAllocation : oldAllocationsFromUser) {
                     if ((oldAllocation.Start_Date__c >= startDate && oldAllocation.Start_Date__c <= endDate) || (oldAllocation.End_Date__c >= startDate && oldAllocation.End_Date__c <= endDate) || (oldAllocation.Start_Date__c <= startDate && oldAllocation.End_Date__c >= endDate)) {
                         fail = true;
+                        break;
                     } 
                 } 
                 if (fail) {
-                    newAllocation.addError('The resource has already been assigned or is used in another project.');
+                    String userName = oldAllocationsByUserId.get(newAllocation.Resource__c)[0].Resource__r.Name;
+                    newAllocation.addError('The assignment of ' + userName + ' failed');
                 }
             }
         }
     }
 
     public static void afterInsert(List<AllocatedResource__c> newAllocations) {
-        
+
         //Mapa donde key=projectId y value=lista de newAllocations
         Map<Id, List<AllocatedResource__c>> allocationsByProjectId = new Map<Id, List<AllocatedResource__c>>();
         for (AllocatedResource__c allocation : newAllocations) {
@@ -52,11 +54,11 @@ public with sharing class AllocatedResourcesTrigger {
             }
             else allocationsByProjectId.get(allocation.ProjectsItem__c).add(allocation);
         }
-        
+
         //traemos los projectItems para actualizar las horas cubiertas
         List<ProjectLineItem__c> projectItems = [SELECT Id, Quantity__c, QuantityHours__c FROM ProjectLineItem__c
                                                  WHERE Id in :allocationsByProjectId.keySet()];
-        
+
         //ahora iteramos los projectItems para calcular las horas cubiertas con las nuevas allocations
         for (ProjectLineItem__c item : projectItems) {
             integer totalDays = 0;
