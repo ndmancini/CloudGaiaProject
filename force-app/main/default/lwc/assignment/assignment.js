@@ -1,46 +1,72 @@
 import { LightningElement, api, wire } from 'lwc';
-import { getRecord, getFieldValue, createRecord } from 'lightning/uiRecordApi';
+import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
+import { refreshApex } from '@salesforce/apex';
+import getFreeResources from '@salesforce/apex/ProjectDataService.getFreeResources';
 import getPendingRoles from '@salesforce/apex/ProjectDataService.getPendingRoles';
+import getResourcesInProject from '@salesforce/apex/ProjectDataService.getResourcesInProject';
 import assignResource from '@salesforce/apex/ProjectDataService.assignResource';
+import assingSquadLead from '@salesforce/apex/ProjectDataService.assingSquadLead';
 
 //fields del objeto Project__c
 import START_DATE_FIELD from '@salesforce/schema/Project__c.Start_Date__c';
 import END_DATE_FIELD from '@salesforce/schema/Project__c.End_Date__c';
-
-//fields del objeto AllocatedResource__c
-import ALLOCATED_RESOURCE from '@salesforce/schema/AllocatedResource__c';
-import RESOURCE from '@salesforce/schema/AllocatedResource__c.Resource__c';
-import PROJECT_ITEM from '@salesforce/schema/AllocatedResource__c.ProjectsItem__c';
-import START_DATE from '@salesforce/schema/AllocatedResource__c.Start_Date__c';
-import END_DATE from '@salesforce/schema/AllocatedResource__c.End_Date__c';
+import SQUAD_LEAD_FIELD from '@salesforce/schema/Project__c.Squad_Lead__c';
 
 export default class Assignment extends LightningElement {
 
-    @api recordId;
-    listToAssign = [];
-    roles;
-    startDate;
-    endDate;
+    @api recordId;          //recordId del proyecto seleccionado
+    listToAssign = [];      //arreglo de resources selectados para ser asignados
+    freeResources;          //recursos libres que vienen de la DB
+    pendingRoles;           //roles pendientes que vienen de la DB
+    startDate;              //comienzo del proyecto
+    endDate;                //fin del proyecto
+    squadLeadCandidates;
+    squadLead;
 
-    @wire(getRecord, { recordId: '$recordId', fields: [START_DATE_FIELD, END_DATE_FIELD] })
+    //traemos fechas y squadLead del proyecto
+    @wire(getRecord, { recordId: '$recordId', fields: [START_DATE_FIELD, END_DATE_FIELD, SQUAD_LEAD_FIELD] })
     loadDates(result) {
         this.startDate = getFieldValue(result.data, START_DATE_FIELD);
         this.endDate = getFieldValue(result.data, END_DATE_FIELD);
+        this.squadLead = getFieldValue(result.data, SQUAD_LEAD_FIELD)
     }
 
-    @wire(getPendingRoles, { projectId: '$recordId' })
-    pendindRoles(result) {
-        this.roles = result;
+    connectedCallback() {
+        this.loadData();
     }
 
+    //cargamos la data en pendingRoles, freeResources y squadLeadCandidates
+    loadData() {
+        getPendingRoles({ projectId: this.recordId })
+            .then(pendingRoles => {
+                this.pendingRoles = pendingRoles;
+                let roles = pendingRoles.map(item => item.Role__c);
+                getFreeResources({ roles })
+                    .then(freeResources => this.freeResources = freeResources)
+            })
+
+        getResourcesInProject({ projectId: this.recordId })
+            .then(users => {
+                let usersArray = [];
+                if (users.length > 0) {
+                    users.forEach(user => {
+                        usersArray.push({ label: user.Name, value: user.Id })
+                    });
+                    this.squadLeadCandidates = usersArray;
+                }
+            })
+    }
+
+    //ataja el customEvent 'addresource' desde Resource LWC
     handleAdd(e) {
-        this.listToAssign.push({ userId: e.detail.id.substring(0, e.detail.id.length-4), projectItemId: e.detail.roleId })
+        this.listToAssign.push({ Resource__c: e.detail.id.substring(0, e.detail.id.length - 4), ProjectsItem__c: e.detail.roleId, Start_Date__c: e.detail.startDate, End_Date__c: e.detail.endDate })
         console.log(this.listToAssign);
     }
 
+    //ataja el customEvent 'removeresource' desde Resource LWC
     handleRemove(e) {
         for (let i = 0; i < this.listToAssign.length; i++) {
-            if (this.listToAssign[i].userId == e.detail.id) {
+            if (this.listToAssign[i].Resource__c == e.detail.id.substring(0, e.detail.id.length - 4)) {
                 this.listToAssign.splice(i, 1);
                 break;
             }
@@ -48,30 +74,29 @@ export default class Assignment extends LightningElement {
         console.log(this.listToAssign);
     }
 
-    assign() {
-
+    //ataja el customEvent 'editresource' desde Resource LWC
+    handleEdit(e) {
         this.listToAssign.forEach(item => {
-
-            const fields = {};
-            fields[RESOURCE.fieldApiName] = item.userId;
-            fields[PROJECT_ITEM.fieldApiName] = item.projectItemId;
-            fields[START_DATE.fieldApiName] = this.startDate;
-            fields[END_DATE.fieldApiName] = this.endDate;
-
-            const recordInput = { apiName: ALLOCATED_RESOURCE.objectApiName, fields}
-
-            createRecord(recordInput)
-            .then(() => console.log('listo'))
-
+            if (item.Resource__c == e.detail.id.substring(0, e.detail.id.length - 4)) {
+                item.Start_Date__c = e.detail.startDate;
+                item.End_Date__c = e.detail.endDate;
+            }
         });
+        console.log(this.listToAssign);
+    }
 
-        /*const fields = {};
-        fields[RESOURCE.fieldApiName] = '0055f000000unFzAAI';
-        fields[PROJECT_ITEM.fieldApiName] = 'a025f000001bXIAAA2';
-        const recordInput = { Resource__c: '0055f000000unG4AAI', ProjectsItem__c: 'a025f000001bXIAAA2' }
+    //guarda la lista listToAssign en la DB
+    assign() {
+        assignResource({ newAllocatedResources: this.listToAssign })
+            .then(() => window.location.reload())
+    }
 
-        let arrToAsign = [];
-        arrToAsign.push(recordInput);
-        assignResource(arrToAsign);*/
+    updateSquadLead(e) {
+        assingSquadLead({ userId: e.target.value, projectId: this.recordId })
+            .then(() => console.log('listo'))
+    }
+
+    @api async refresh() {
+        await refreshApex(this.loadData());
     }
 }

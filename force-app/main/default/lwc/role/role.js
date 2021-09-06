@@ -1,25 +1,23 @@
-import { LightningElement, wire, api } from 'lwc';
-import getFreeResourcesByRole from '@salesforce/apex/ProjectDataService.getFreeResourcesByRole';
+import { LightningElement, api } from 'lwc';
 
 export default class Role extends LightningElement {
-    @api roleId;
+    
     @api roleName;
-    @api startDate;
-    @api endDate;
+    @api resources;
     @api totalHours;
     @api coveredHours;
+
+    @api roleId;
+    @api startDate;
+    @api endDate;
+    
     freeResources;
     pendingHours;
 
-    @wire(getFreeResourcesByRole, { startDate: '$startDate', endDate: '$endDate', role: '$roleName' })
-    resources(result) {
-        let resources = [];
-        if (result.data && result.data.length > 0) {
-            for (let i = 0; i < result.data.length; i++) {
-                resources.push({Id: result.data[i].Id, Name: result.data[i].Name});
-            }
+    connectedCallback() {
+        if (this.resources != null && this.roleName != null) {
+            this.freeResources = this.resources[this.roleName];
+            this.pendingHours = this.totalHours - this.coveredHours;
         }
-        this.freeResources = resources;
-        this.pendingHours = this.totalHours - this.coveredHours;
     }
 }
