@@ -1,0 +1,15 @@
+.comboboxAndButton {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.squadLead {
+    border-radius: 5px;
+    width: 30vw;
+    margin: 20px auto 50px auto;
+    padding: 0px 10px 10px 10px;
+    background-color: rgb(208, 226, 238);
+}

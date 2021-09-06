@@ -11,10 +11,18 @@
                 </c-role>
             </template>
         </template>
-        <lightning-button label="Assign" onclick={assign} class="slds-p-vertical_large" variant="brand">
-        </lightning-button>
+
+        <div class="comboboxAndButton">
+            <div class="squadLead">
+                <lightning-combobox label="Choose a Squad Lead" options={squadLeadCandidates} value={squadLead}
+                    onchange={updateSquadLead}></lightning-combobox>
+            </div>
+            <div class="assignButton">
+                <lightning-button label="Assign" onclick={assign} variant="brand">
+                </lightning-button>
+            </div>
+
+        </div>
     </template>
-    <div>
-        <lightning-combobox label="Choose a Squad Lead" options={squadLeadCandidates} value={squadLead} onchange={updateSquadLead}></lightning-combobox>
-    </div>
+
 </template>
