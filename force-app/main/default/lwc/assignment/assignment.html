@@ -14,4 +14,7 @@
         <lightning-button label="Assign" onclick={assign} class="slds-p-vertical_large" variant="brand">
         </lightning-button>
     </template>
+    <div>
+        <lightning-combobox label="Choose a Squad Lead" options={squadLeadCandidates} value={squadLead} onchange={updateSquadLead}></lightning-combobox>
+    </div>
 </template>
