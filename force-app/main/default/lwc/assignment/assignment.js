@@ -26,7 +26,7 @@ export default class Assignment extends LightningElement {
 
     //traemos fechas y squadLead del proyecto
     @wire(getRecord, { recordId: '$recordId', fields: [START_DATE_FIELD, END_DATE_FIELD, SQUAD_LEAD_FIELD] })
-    loadDates(result) {
+    loadProjectData(result) {
         this.startDate = getFieldValue(result.data, START_DATE_FIELD);
         this.endDate = getFieldValue(result.data, END_DATE_FIELD);
         this.squadLead = getFieldValue(result.data, SQUAD_LEAD_FIELD)
@@ -42,7 +42,7 @@ export default class Assignment extends LightningElement {
             .then(pendingRoles => {
                 this.pendingRoles = pendingRoles;
                 let roles = pendingRoles.map(item => item.Role__c);
-                getFreeResources({ roles })
+                getFreeResources({ roles, startDate: this.startDate, endDate: this.endDate })
                     .then(freeResources => this.freeResources = freeResources)
             })
 

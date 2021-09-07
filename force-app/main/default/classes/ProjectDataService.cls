@@ -17,9 +17,10 @@ public with sharing class ProjectDataService {
 
     //método para traernos los recursos libres fuera de las fechas pasadas como parámetro
     @AuraEnabled(Cacheable=true)
-    public static Map<String, List<User>> getFreeResources(List<String> roles) {
+    public static Map<String, List<User>> getFreeResources(List<String> roles, Date startDate, Date endDate) {
         List<User> freeResourcesList = [SELECT Id, Name, UserRole.Name
-                FROM User WHERE UserRole.Name IN :roles];
+                FROM User WHERE (UserRole.Name IN :roles) AND 
+                (Id NOT IN (SELECT Resource__c FROM AllocatedResource__c WHERE Start_Date__c = :startDate AND End_Date__c = :endDate))];
 
         Map<String, List<User>> freeResourcesByRole = new Map<String, List<User>>();
         for (User resource : freeResourcesList) {
@@ -34,8 +35,7 @@ public with sharing class ProjectDataService {
     //método para insertar registros en el objeto AllocatedResource (asignar recursos)
     @AuraEnabled
     public static void assignResource(List<AllocatedResource__c> newAllocatedResources) {
-        //insert newAllocatedResources;
-        database.insert(newAllocatedResources, false);
+        insert newAllocatedResources;
     }
 
     //método para insertar el squadLead del projecto
