@@ -1,4 +1,4 @@
-public with sharing class AllocatedResourcesTrigger {
+public with sharing class AllocatedResourceTrigger {
 
     public static void beforeInsert(List<AllocatedResource__c> newAllocations) {
 

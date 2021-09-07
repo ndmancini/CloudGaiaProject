@@ -68,21 +68,42 @@ public with sharing class AllocatedResourceTriggerTest {
 
         List<User> allUsers= [SELECT Id FROM USER];
         List<ProjectLineItem__c> allItems=[SELECT id FROM ProjectLineItem__c];
-        List<AllocatedResource__c> allocatedList= new List<AllocatedResource__c>();
+        List<AllocatedResource__c> allocatedListOld= new List<AllocatedResource__c>();
 
-        for(Integer i=0; i<Quantity; i++){
+        for(Integer i=0; i<10; i++){
             for(User user: allUsers){
                 AllocatedResource__c allocated= new AllocatedResource__c();
-                if(math.mod(Quantity,2) == 0){
-                    system.debug('entro al if');
+                if(math.mod(Quantity,2) == 0){                    
+                    allocated.Start_Date__c= Date.newInstance(2021, 09, 10);
+                    allocated.End_Date__c= Date.newInstance(2021, 12, 10);
+                    allocated.ProjectsItem__c= allItems[i].Id;
+                    allocated.Resource__c= user.Id;
+                    allocatedListOld.add(allocated);
+                    break;
+                }else{                    
+                    allocated.Start_Date__c= Date.newInstance(2021, 09, 25);
+                    allocated.End_Date__c= Date.newInstance(2022, 01, 10);
+                    allocated.ProjectsItem__c= allItems[i].Id;
+                    allocated.Resource__c= user.Id;
+                    allocatedListOld.add(allocated);
+                    break; 
+                }
+            }
+        }
+        insert allocatedListOld;
+
+        List<AllocatedResource__c> allocatedList= new List<AllocatedResource__c>();
+        for(Integer i=0; i<Quantity-10; i++){
+            for(User user: allUsers){
+                AllocatedResource__c allocated= new AllocatedResource__c();
+                if(math.mod(Quantity,2) == 0){                    
                     allocated.Start_Date__c= Date.newInstance(2021, 09, 10);
                     allocated.End_Date__c= Date.newInstance(2021, 12, 10);
                     allocated.ProjectsItem__c= allItems[i].Id;
                     allocated.Resource__c= user.Id;
                     allocatedList.add(allocated);
                     break;
-                }else{
-                    system.debug('entro al else');
+                }else{                    
                     allocated.Start_Date__c= Date.newInstance(2021, 09, 25);
                     allocated.End_Date__c= Date.newInstance(2022, 01, 10);
                     allocated.ProjectsItem__c= allItems[i].Id;
